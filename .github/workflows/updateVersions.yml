@@ -5,10 +5,12 @@ on:
     inputs:
       image-version: 
         description: "Version to set app-version to"
-        required: true
+        required: false
+        default: 1.2.0
       path-to-chart-yaml:
         description: "Path to Chart.yaml file that should be updated"
-        required: true
+        required: false
+        default: charts/backend/Chart.yaml
   repository_dispatch:
     types: [trigger-event]
     inputs:

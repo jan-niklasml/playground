@@ -9,6 +9,17 @@ on:
       path-to-chart-yaml:
         description: "Path to Chart.yaml file that should be updated"
         required: true
+  repository_dispatch:
+    types: [trigger-event]
+    inputs:
+      image-version: 
+        description: "Version to set app-version to"
+        required: false
+        default: 1.2.0
+      path-to-chart-yaml:
+        description: "Path to Chart.yaml file that should be updated"
+        required: false
+        default: charts/backend/Chart.yaml
 permissions:
   contents: write
 

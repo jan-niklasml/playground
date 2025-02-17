@@ -1,0 +1,25 @@
+name: Update Versions in Chart.yml
+
+on:
+  workflow_dispatch:
+    inputs:
+      image-version: 
+        description: "Version to set app-version to"
+        required: true
+      path-to-chart-yaml:
+        description: "Path to Chart.yaml file that should be updated"
+        required: true
+
+jobs:
+  update-versions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Python
+        run: |
+          pip install packaging.version
+          pip install ruamel.yaml
+      - name: Run Python script
+        run: python update_chart_versions.py --appVersion ${{ inputs.image-version }} --pathToChartYaml ${{ inputs.pathToChartYaml }}
+      

@@ -22,6 +22,8 @@ jobs:
           python-version: '3.10'
       - name: Install Python Packages
         run: |
+          pip install packaging.version
+          pip install ruamel.yaml
       - name: Run Python script
         run: python update_chart_versions.py --appVersion ${{ inputs.image-version }} --pathToChartYaml ${{ inputs.pathToChartYaml }}
       

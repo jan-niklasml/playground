@@ -8,7 +8,8 @@ def increment_version(version):
     return f"{v.major}.{v.minor}.{v.micro + 1}"
 
 parser = argparse.ArgumentParser(description='Upgrade Versions')
-parser.add_argument('--appVersion', help='New App-Version')
+parser.add_argument('--appVersionBackend', help='New App-Version for backend')
+parser.add_argument('--appVersionFrontend', help='New App-Version for frontend')
 parser.add_argument('--pathToChart', help='Path to superior Chart.yaml')
 parser.add_argument('--pathToBackendChart', help='Path to backend Chart.yaml')
 parser.add_argument('--pathToFrontendChart', help='Path to frontend Chart.yaml')
@@ -24,15 +25,15 @@ with open(args.pathToBackendChart, "r") as file:
 with open(args.pathToFrontendChart, "r") as file:
     frontend_chart_file_data = yaml.load(file)
 
-if backend_chart_file_data["appVersion"] != args.appVersion:
+if backend_chart_file_data["appVersion"] != args.appVersionBackend:
     backend_chart_file_data["version"] = increment_version(backend_chart_file_data["version"])
-    backend_chart_file_data["appVersion"] = DoubleQuotedScalarString(args.appVersion)
+    backend_chart_file_data["appVersion"] = DoubleQuotedScalarString(args.appVersionBackend)
     backend_entry_index = chart_file_data["dependencies"].index(next(filter(lambda entry: entry['name'] == 'backend', chart_file_data["dependencies"]), None))
     chart_file_data["dependencies"][backend_entry_index]["version"] = backend_chart_file_data["version"]
     
-if frontend_chart_file_data["appVersion"] != args.appVersion:
+if frontend_chart_file_data["appVersion"] != args.appVersionFrontend:
     frontend_chart_file_data["version"] = increment_version(frontend_chart_file_data["version"])
-    frontend_chart_file_data["appVersion"] = DoubleQuotedScalarString(args.appVersion)
+    frontend_chart_file_data["appVersion"] = DoubleQuotedScalarString(args.appVersionFrontend)
     frontend_entry_index = chart_file_data["dependencies"].index(next(filter(lambda entry: entry['name'] == 'frontend', chart_file_data["dependencies"]), None))
     chart_file_data["dependencies"][frontend_entry_index]["version"] = frontend_chart_file_data["version"]
 

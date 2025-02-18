@@ -3,8 +3,11 @@ name: Update Versions in Chart.yml
 on:
   workflow_dispatch:
     inputs:
-      image-version: 
-        description: "Version to set app-version to"
+      app-version-backend: 
+        description: "Version to set app-version in backend to"
+        required: true
+      app-version-frontend:
+        description: "Version to set app-version in frontend to"
         required: true
       path-to-chart-yaml:
         description: "Path to Chart.yaml"
@@ -39,10 +42,10 @@ jobs:
           pip install -r requirements.txt
       - name: Run Python script with input from workflow_dispatch
         if: github.event_name == 'workflow_dispatch'
-        run: python update_chart_versions.py --appVersion ${{ inputs.image-version }} --pathToChart ${{ inputs.path-to-chart-yaml }} --pathToBackendChart ${{ inputs.path-to-backend-chart }} --pathToFrontendChart ${{ inputs.path-to-frontend-chart }}
+        run: python update_chart_versions.py --appVersionBackend ${{ inputs.app-version-backend }} --appVersionFrontend ${{ inputs.app-version-frontend }} --pathToChart ${{ inputs.path-to-chart-yaml }} --pathToBackendChart ${{ inputs.path-to-backend-chart }} --pathToFrontendChart ${{ inputs.path-to-frontend-chart }}
       - name: Run Python script with input from repository_dispatch
         if: github.event_name == 'repository_dispatch'
-        run: python update_chart_versions.py --appVersion ${{ github.event.client_payload.image-version }} --pathToChart ${{ github.event.client_payload.path-to-chart-yaml }} --pathToBackendChart ${{ github.event.client_payload.path-to-backend-chart }} --pathToFrontendChart ${{ github.event.client_payload.path-to-frontend-chart }}
+        run: python update_chart_versions.py --appVersionBackend ${{ github.event.client_payload.app-version-backend }} --appVersionFrontend ${{ github.event.client_payload.app-version-frontend }} --pathToChart ${{ github.event.client_payload.path-to-chart-yaml }} --pathToBackendChart ${{ github.event.client_payload.path-to-backend-chart }} --pathToFrontendChart ${{ github.event.client_payload.path-to-frontend-chart }}
       - name: Commit Files
         run: |
           git config --global user.name 'Your Name'

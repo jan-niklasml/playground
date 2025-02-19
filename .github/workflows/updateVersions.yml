@@ -50,7 +50,7 @@ jobs:
             git checkout -b $NEW_BRANCH
             git commit -am "Updated Versions"
             git push --set-upstream origin $NEW_BRANCH
-            gh pr create --base main --head $NEW_BRANCH --title "Update Versions for Chart ${{ inputs.path-to-chart-yaml }}" --body "This PR updates the versions for ${{ inputs.path-to-chart-yaml }} in the Chart.yaml files."
+            gh pr create --base main --head $NEW_BRANCH --title "Update Versions for Chart" --body "This PR updates the versions in Chart.yaml files."
           else
             echo "No changes to commit"
           fi

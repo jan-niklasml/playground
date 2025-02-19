@@ -39,6 +39,8 @@ jobs:
         if: github.event_name == 'repository_dispatch'
         run: python update_chart_versions.py --appVersion ${{ github.event.client_payload.app-version }} --pathToChart ${{ github.event.client_payload.path-to-chart-yaml }} --pathToParentChart ${{ github.event.client_payload.path-to-parent-chart-yaml }}
       - name: Commit Files and create Pull-Request
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           git config --global user.name 'Your Name'
           git config --global user.email 'your-username@users.noreply.github.com'

@@ -43,14 +43,12 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          git config --global user.name 'Your Name'
-          git config --global user.email 'your-username@users.noreply.github.com'
           if [ -n "$(git status --porcelain)" ]; then
             NEW_BRANCH="update-versions-$(date +%Y%m%d%H%M%S)"
             git checkout -b $NEW_BRANCH
             git commit -am "Updated Versions"
             git push --set-upstream origin $NEW_BRANCH
-            gh pr create --base main --head $NEW_BRANCH --title "Update Versions in Chart.yaml" --body "This PR updates the versions for a Chart in the Chart.yaml files."
+            gh pr create --base main --head $NEW_BRANCH --title "Update Versions for Chart ${{ inputs.path-to-chart-yaml }}" --body "This PR updates the versions for ${{ inputs.path-to-chart-yaml }} in the Chart.yaml files."
           else
             echo "No changes to commit"
           fi

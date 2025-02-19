@@ -3,24 +3,16 @@ name: Update Versions in Chart.yml
 on:
   workflow_dispatch:
     inputs:
-      app-version-backend: 
+      app-version: 
         description: "Version to set app-version in backend to"
-        required: true
-      app-version-frontend:
-        description: "Version to set app-version in frontend to"
         required: true
       path-to-chart-yaml:
         description: "Path to Chart.yaml"
         required: true
+      path-to-parent-chart-yaml:
+        description: "Path to parent Chart.yaml"
+        required: true
         default: Chart.yaml
-      path-to-backend-chart:
-        description: "Path to backend Chart.yaml"
-        required: true
-        default: charts/backend/Chart.yaml
-      path-to-frontend-chart:
-        description: "Path to frontend Chart.yaml"
-        required: true
-        default: charts/frontend/Chart.yaml
   repository_dispatch:
     types: [trigger-event]
 permissions:
@@ -42,10 +34,10 @@ jobs:
           pip install -r requirements.txt
       - name: Run Python script with input from workflow_dispatch
         if: github.event_name == 'workflow_dispatch'
-        run: python update_chart_versions.py --appVersionBackend ${{ inputs.app-version-backend }} --appVersionFrontend ${{ inputs.app-version-frontend }} --pathToChart ${{ inputs.path-to-chart-yaml }} --pathToBackendChart ${{ inputs.path-to-backend-chart }} --pathToFrontendChart ${{ inputs.path-to-frontend-chart }}
+        run: python update_chart_versions.py --appVersion ${{ inputs.app-version }} --pathToChart ${{ inputs.path-to-chart-yaml }} --pathToParentChart ${{ inputs.path-to-parent-chart-yaml }}
       - name: Run Python script with input from repository_dispatch
         if: github.event_name == 'repository_dispatch'
-        run: python update_chart_versions.py --appVersionBackend ${{ github.event.client_payload.app-version-backend }} --appVersionFrontend ${{ github.event.client_payload.app-version-frontend }} --pathToChart ${{ github.event.client_payload.path-to-chart-yaml }} --pathToBackendChart ${{ github.event.client_payload.path-to-backend-chart }} --pathToFrontendChart ${{ github.event.client_payload.path-to-frontend-chart }}
+        run: python update_chart_versions.py --appVersion ${{ github.event.client_payload.app-version }} --pathToChart ${{ github.event.client_payload.path-to-chart-yaml }} --pathToParentChart ${{ github.event.client_payload.path-to-parent-chart-yaml }}
       - name: Commit Files
         run: |
           git config --global user.name 'Your Name'

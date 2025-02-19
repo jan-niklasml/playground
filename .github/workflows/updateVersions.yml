@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       app-version: 
-        description: "Version to set app-version in backend to"
+        description: "Version to set app-version to"
         required: true
       path-to-chart-yaml:
         description: "Path to Chart.yaml"

@@ -16,7 +16,7 @@ env:
   GH_TOKEN: ${{ github.token }}
   REPO_URL: "https://github.com/${{ github.repository }}"
   APP_VERSION: ${{ inputs.app-version }}
-  PATH_TO_CHART: ${{ inputs.path-to-chart }}
+  PATH_TO_CHART: ${{ inputs.path-to-chart-yaml }}
 
 jobs:
   update-versions:

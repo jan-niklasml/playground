@@ -43,10 +43,17 @@ jobs:
           git config --global user.email 'your-username@users.noreply.github.com'
           if [ -n "$(git status --porcelain)" ]; then
             NEW_BRANCH="update-versions-$(date +%Y%m%d%H%M%S)"
+            if [ $(github.event_name) == 'workflow_dispatch' ]; then
+              PR_TITLE="Update Version for Chart $(inputs.path-to-chart-yaml)"
+              PR_BODY="This PR updates Chart $(inputs.path-to-chart-yaml) to App-Version $(inputs.app-version)"
+            else
+              PR_TITLE="Update Version for Chart $(github.event.client_payload.path-to-chart.yaml)"
+              PR_BODY="This PR updates Chart $(github.event.client_payload.path-to-chart-yaml) to App-Version $(github.event.client_payload.app-version)"
+            fi
             git checkout -b $NEW_BRANCH
             git commit -am "Updated Versions"
             git push --set-upstream origin $NEW_BRANCH
-            gh pr create --base main --head $NEW_BRANCH --title "Update Versions for Chart" --body "This PR updates the versions in Chart.yaml files."
+            gh pr create --base main --head $NEW_BRANCH --title $PR_TITLE --body $PR_BODY
           else
             echo "No changes to commit"
           fi

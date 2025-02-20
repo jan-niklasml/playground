@@ -45,11 +45,11 @@ jobs:
           
           if [ -n "$(git status --porcelain)" ]; then
             if [ ${{ github.event_name }} == 'workflow_dispatch' ]; then
-              PATH_TO_CHART = ${{ inputs.path-to-chart-yaml }}
-              APP_VERSION = ${{ inputs.app-version }}
+              PATH_TO_CHART=${{ inputs.path-to-chart-yaml }}
+              APP_VERSION=${{ inputs.app-version }}
             else
-              PATH_TO_CHART = ${{ github.event.client_payload.path-to-chart-yaml }}
-              APP_VERSION = ${{ github.event.client_payload.app-version }}
+              PATH_TO_CHART=${{ github.event.client_payload.path-to-chart-yaml }}
+              APP_VERSION=${{ github.event.client_payload.app-version }}
             fi
 
             NEW_BRANCH="update-$PATH_TO_CHART-$APP_VERSION"

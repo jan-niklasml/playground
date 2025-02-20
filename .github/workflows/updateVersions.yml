@@ -44,6 +44,7 @@ jobs:
             PR_BODY="This PR updates Chart [$PATH_TO_CHART]($REPO_URL/blob/$NEW_BRANCH/$PATH_TO_CHART) to App-Version $APP_VERSION"
             if [ git show-ref --verify --quiet refs/heads/$NEW_BRANCH ]; then
               git checkout $NEW_BRANCH
+              git pull
             else
               git checkout -b $NEW_BRANCH
             fi

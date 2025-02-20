@@ -9,11 +9,14 @@ on:
       path-to-chart-yaml:
         description: "Path to Chart.yaml"
         required: true
-  repository_dispatch:
-    types: [trigger-event]
 permissions:
   contents: write
   pull-requests: write
+env:
+  GH_TOKEN: ${{ github.token }}
+  REPO_URL: "https://github.com/${{ github.repository }}"
+  APP_VERSION: ${{ inputs.app-version }}
+  PATH_TO_CHART: ${{ inputs.path-to-chart }}
 
 jobs:
   update-versions:
@@ -29,33 +32,16 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      - name: Run Python script with input from workflow_dispatch
-        if: github.event_name == 'workflow_dispatch'
-        run: python update_chart_versions.py --appVersion ${{ inputs.app-version }} --pathToChart ${{ inputs.path-to-chart-yaml }}
-      - name: Run Python script with input from repository_dispatch
-        if: github.event_name == 'repository_dispatch'
-        run: python update_chart_versions.py --appVersion ${{ github.event.client_payload.app-version }} --pathToChart ${{ github.event.client_payload.path-to-chart-yaml }}
+      - name: Run Python script
+        run: python update_chart_versions.py --appVersion $APP_VERSION --pathToChart $PATH_TO_CHART
       - name: Commit Files and create Pull-Request
-        env:
-          GH_TOKEN: ${{ github.token }}
-          REPO_URL: "https://github.com/${{ github.repository }}"
         run: |
           git config --global user.name 'Your Name'
           git config --global user.email 'your-username@users.noreply.github.com'
-          
           if [ -n "$(git status --porcelain)" ]; then
-            if [ ${{ github.event_name }} == 'workflow_dispatch' ]; then
-              PATH_TO_CHART=${{ inputs.path-to-chart-yaml }}
-              APP_VERSION=${{ inputs.app-version }}
-            else
-              PATH_TO_CHART=${{ github.event.client_payload.path-to-chart-yaml }}
-              APP_VERSION=${{ github.event.client_payload.app-version }}
-            fi
-
             NEW_BRANCH="update-$PATH_TO_CHART-$APP_VERSION"
             PR_TITLE="Update Chart $PATH_TO_CHART to v$APP_VERSION"
             PR_BODY="This PR updates Chart [$PATH_TO_CHART]($REPO_URL/blob/$NEW_BRANCH/$PATH_TO_CHART) to App-Version $APP_VERSION"
-            
             git checkout -b $NEW_BRANCH
             git commit -am "Updated Versions"
             git push --set-upstream origin $NEW_BRANCH

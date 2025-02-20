@@ -42,16 +42,20 @@ jobs:
         run: |
           git config --global user.name 'Your Name'
           git config --global user.email 'your-username@users.noreply.github.com'
+          
           if [ -n "$(git status --porcelain)" ]; then
             if [ ${{ github.event_name }} == 'workflow_dispatch' ]; then
-              NEW_BRANCH="update-${{ inputs.path-to-chart-yaml }}-${{ inputs.app-version }}"
-              PR_TITLE="Update Chart ${{ inputs.path-to-chart-yaml }} to v${{ inputs.app-version }}"
-              PR_BODY="This PR updates Chart [${{ inputs.path-to-chart-yaml }}]($REPO_URL/blob/$NEW_BRANCH/${{ inputs.path-to-chart-yaml }}) to App-Version ${{ inputs.app-version }}"
+              PATH_TO_CHART = ${{ inputs.path-to-chart-yaml }}
+              APP_VERSION = ${{ inputs.app-version }}
             else
-              NEW_BRANCH="update-${{ github.event.client_payload.path-to-chart.yaml }}-${{ github.event.client_payload.app-version }}"
-              PR_TITLE="Update Chart ${{ github.event.client_payload.path-to-chart.yaml }} to v${{ github.event.client_payload.app-version }}"
-              PR_BODY="This PR updates Chart [${{ github.event.client_payload.path-to-chart-yaml }}]($REPO_URL/blob/$NEW_BRANCH/${{ github.event.client_payload.path-to-chart-yaml }}) to App-Version ${{ github.event.client_payload.app-version }}"
+              PATH_TO_CHART = ${{ github.event.client_payload.path-to-chart-yaml }}
+              APP_VERSION = ${{ github.event.client_payload.app-version }}
             fi
+
+            NEW_BRANCH="update-$PATH_TO_CHART-$APP_VERSION"
+            PR_TITLE="Update Chart $PATH_TO_CHART to v$APP_VERSION"
+            PR_BODY="This PR updates Chart [$PATH_TO_CHART]($REPO_URL/blob/$NEW_BRANCH/$PATH_TO_CHART) to App-Version $APP_VERSION"
+            
             git checkout -b $NEW_BRANCH
             git commit -am "Updated Versions"
             git push --set-upstream origin $NEW_BRANCH

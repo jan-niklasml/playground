@@ -51,7 +51,13 @@ jobs:
               git checkout -b $NEW_BRANCH
             fi
             git push --set-upstream origin $NEW_BRANCH
-            gh pr create --base main --head $NEW_BRANCH --title "$PR_TITLE" --body "$PR_BODY"
+
+            PR_EXISTS=$(gh pr list --head ${{ github.repository_owner }}:${{ env.NEW_BRANCH }} --base main --json number --jq 'length')
+            if [ "$PR_EXISTS" -gt 0 ]; then
+              echo "Pull Request already exists."
+            else
+              gh pr create --base main --head $NEW_BRANCH --title "$PR_TITLE" --body "$PR_BODY"
+            fi
           else
             echo "No changes to commit"
           fi

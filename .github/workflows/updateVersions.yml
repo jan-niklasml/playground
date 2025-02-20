@@ -47,6 +47,7 @@ jobs:
               git checkout $NEW_BRANCH
               git pull
             else
+              echo "Created new branch $NEW_BRANCH."
               git checkout -b $NEW_BRANCH
             fi
             git commit -am "Updated Versions"

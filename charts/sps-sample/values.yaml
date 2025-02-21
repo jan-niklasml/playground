@@ -99,7 +99,7 @@ frontend:
 backend:
   image:
     repository: ghcr.io/it-at-m/sps/sps-backend
-    tag: "latest"
+    tag: "1.6.2"
   env:
     - name: GC_MAX_METASPACE_SIZE
       value: "200"

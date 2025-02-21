@@ -94,7 +94,7 @@ refarch-gateway:
 frontend:
   image:
     repository: ghcr.io/it-at-m/sps/sps-frontend
-    tag: "latest"
+    tag: "1.5.6"
 
 backend:
   image:

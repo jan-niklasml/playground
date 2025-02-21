@@ -1,0 +1,17 @@
+name: Update Image-Tag in values.yaml
+
+on:
+  workflow_dispatch:
+    inputs:
+      path-to-values-yaml: 
+        description: "Path to values.yaml"
+        required: true
+      image-tag:
+        description: "New Image-Tag"
+        required: true
+      path-to-image-tag-field-in-file:
+        description: "Path/Keys to Image-Tag Field in values.yaml file"
+        required: true
+      path-to-chart-yaml:
+        description: "Path to Chart.yaml"
+        required: true

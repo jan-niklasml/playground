@@ -49,7 +49,7 @@ jobs:
           if [ -n "$(git status --porcelain)" ]; then
             NEW_BRANCH="update-$PATH_TO_VALUES_FILE-$IMAGE_TAG"
             PR_TITLE="Update Image-Tag in $PATH_TO_VALUES_FILE to $IMAGE_TAG"
-            PR_BODY="This PR updates the Image-Tag in [$PATH_TO_VALUES_FILE]($REPO_URL/blob/$NEW_BRANCH/$PATH_TO_VALUES_FILE) to `$IMAGE_TAG`"
+            PR_BODY="This PR updates the Image-Tag in [$PATH_TO_VALUES_FILE]($REPO_URL/blob/$NEW_BRANCH/$PATH_TO_VALUES_FILE) to $IMAGE_TAG"
             git fetch --all
             git commit -am "Update Image-Tag in $PATH_TO_VALUES_FILE to $IMAGE_TAG"
             if git show-ref --verify --quiet refs/remotes/origin/$NEW_BRANCH; then

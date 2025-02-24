@@ -15,6 +15,8 @@ args = parser.parse_args()
 
 yaml = ruamel.yaml.YAML()
 yaml.preserve_quotes = True
+yaml.indent(offset=2, sequence=4)
+yaml.width = 100
 
 # Check, whether passed file path is sub-chart or parent-chart
 path_to_helm_charts = os.path.abspath('charts/')
